@@ -36,7 +36,7 @@ namespace Enemy
             this.maxTimer = Random.Range(0.2f, 0.8f);
             this.timer = this.maxTimer;
             this.normalSpeed = this.moveSpeed;
-            this.anim.SetBool(AnimState.Moving, true);
+            this.anim.SetBool(AnimState.Move, true);
         }
 
         private void FixedUpdate()
@@ -52,6 +52,11 @@ namespace Enemy
                 Rotate(this.enemyGroup.GetRoamingPosition());
                 return;
             }
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            Debug.Log(other.name);
         }
 
         private void Rotate(Vector3 direction)
@@ -102,24 +107,19 @@ namespace Enemy
             this.velocity = Vector3.zero;
             this.isIdle = true;
             base.StartCoroutine(IdleRotate());
-            this.anim.SetBool(AnimState.Moving, false);
+            this.anim.SetBool(AnimState.Move, false);
         }
 
         public void SetWalking()
         {
             this.isIdle = false;
-            this.anim.SetBool(AnimState.Moving, true);
+            this.anim.SetBool(AnimState.Move, true);
             SetInnerCircleColliderRadius(this.startingInnerCircleColliderRadius);
         }
 
         public void SetInnerCircleColliderRadius(float radius)
         {
             this.innerCircleCollider.radius = radius;
-        }
-
-        private void OnDrawGizmos()
-        {
-            Handles.Label(base.transform.position, isIdle ? "idle" : "running");
         }
     }
 }

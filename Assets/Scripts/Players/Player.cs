@@ -4,7 +4,7 @@ using Enemy;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Player
+namespace Players
 {
     public class Player : MonoBehaviour
     {
@@ -52,9 +52,9 @@ namespace Player
 
         private void HandleMovement()
         {
-            if (UnityEngine.Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0))
             {
-                var vector = this.mainCamera.ScreenToViewportPoint(UnityEngine.Input.mousePosition);
+                var vector = this.mainCamera.ScreenToWorldPoint(Input.mousePosition);
                 this.velocity = (vector - base.transform.position).normalized;
                 this.distanceSpeed = Vector3.Distance(vector, base.transform.position);
                 if (this.distanceSpeed < 2f)
@@ -62,14 +62,16 @@ namespace Player
                     this.distanceSpeed = 2f;
                 }
 
-                this.anim.SetBool(AnimState.Moving, true);
+                this.anim.SetBool(AnimState.Move, true);
                 this.anim.speed = this.randomMovingSpeed;
+                //Debug.DrawLine(base.transform.position,vector,Color.cyan);
+                Debug.Log("Vector: "+vector);
             }
 
-            if (!UnityEngine.Input.GetMouseButtonUp(0)) return;
+            if (!Input.GetMouseButtonUp(0)) return;
             
             this.velocity = Vector3.zero;
-            this.anim.SetBool(AnimState.Moving, false);
+            this.anim.SetBool(AnimState.Move, false);
             this.anim.speed = 1f;
         }
 
